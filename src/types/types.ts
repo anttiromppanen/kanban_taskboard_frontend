@@ -1,9 +1,20 @@
 export type StatusType = "Backlog" | "To do" | "In progress" | "Done";
+export type UserRoles = "admin" | "user";
 
 export interface IToken {
   token: string;
   username: string;
-  role: "admin" | "user";
+  role: UserRoles;
+}
+
+export interface IComment {
+  _id: string;
+  text: string;
+  commentType: "comment" | "question" | "bug";
+  createdBy: { _id: string; username: string };
+  createdAt: Date;
+  resolved: boolean | Date;
+  markedResolvedBy: { _id: string; username: string } | null;
 }
 
 export interface ITask {
@@ -12,9 +23,10 @@ export interface ITask {
   description: string;
   status: StatusType;
   createdBy: string;
+  createdAt: Date;
+  users: { _id: string; username: string }[];
+  comments: IComment[];
 }
-
-export interface User {}
 
 export interface ITaskboard {
   _id: string;
@@ -26,3 +38,7 @@ export interface ITaskboard {
   users: { _id: string; username: string }[];
   admins: string[];
 }
+
+export type TasksByStatus = {
+  [key in StatusType]: ITask[];
+};

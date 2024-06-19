@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -6,5 +6,17 @@
 @layer base {
   html {
     @apply bg-userGray1;
+  }
+}
+
+@layer components {
+  .diagonal-stripes {
+    background: repeating-linear-gradient(
+      45deg,
+      #1f1d24,
+      #1f1d24 10px,
+      #2b2931 10px,
+      #2b2931 20px
+    );
   }
 }

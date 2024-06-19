@@ -1,9 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: [
-    "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
-  ],
+  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
       fontFamily: {
@@ -16,8 +13,10 @@ module.exports = {
         userPurple: "#7F55D6",
         userGreen: "#2CBCAB",
         userYellow: "#F3EF8B",
+        userPink: "#FF7B9C",
+        userLightBlue: "#DCD6F7",
       },
     },
   },
   plugins: [],
-}
+};

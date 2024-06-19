@@ -1,11 +1,11 @@
 /* eslint-disable no-underscore-dangle */
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
+import AvatarRow from "../../components/AvatarRow";
 import TaskboardFrame from "../../components/TaskboardFrame";
 import useAuth from "../../hooks/useAuth";
 import { getTaskboardsForUser } from "../../services/userService";
 import { ITaskboard, IToken } from "../../types/types";
-import randomAvatar from "../../helpers/randomAvatar";
 
 function TaskboardPreview({ taskboard }: { taskboard: ITaskboard }) {
   const { _id: id, name, description, createdAt, createdBy, users } = taskboard;
@@ -19,17 +19,7 @@ function TaskboardPreview({ taskboard }: { taskboard: ITaskboard }) {
       <p>{description}</p>
       <p>Created at {new Date(createdAt).toDateString()}</p>
       <p>Created by {createdBy.username}</p>
-      <div className="mt-1 flex">
-        {users.map((x) => (
-          <img
-            key={x._id}
-            src={randomAvatar()}
-            alt="Avatar"
-            title={x.username}
-            className="size-8 rounded-full border-2 border-userGray1 [&:not(:first-child)]:-ml-3"
-          />
-        ))}
-      </div>
+      <AvatarRow users={users} />
     </Link>
   );
 }
