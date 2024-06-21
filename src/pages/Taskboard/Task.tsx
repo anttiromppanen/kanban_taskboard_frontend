@@ -5,6 +5,8 @@ import { draggable } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
 import { ITask } from "../../types/types";
 import AvatarRow from "../../components/AvatarRow";
 import { statusColors } from "../../const/const";
+import Comment from "../../components/TaskComment/Comment";
+import { timeAgoFromDate } from "../../helpers/formatting";
 
 function Task({ task }: { task: ITask }) {
   const ref = useRef<HTMLButtonElement>(null);
@@ -41,7 +43,7 @@ function Task({ task }: { task: ITask }) {
         </div>
         <p className="text-xs text-neutral-400">{task.description}</p>
         <p className="mb-1 mt-4 text-xs">
-          Created: {new Date(task.createdAt).toLocaleString()}
+          Created: {timeAgoFromDate(task.createdAt)}
         </p>
         <div className="flex items-center justify-between">
           <AvatarRow users={task.users} />
@@ -53,7 +55,7 @@ function Task({ task }: { task: ITask }) {
       {isOpen && (
         <div className="fixed left-0 top-0 h-screen w-full bg-black/50">
           <div
-            className={`fixed right-0 top-0 h-full w-1/3 border-l-4 bg-userGray2 px-8 py-4 md:h-screen ${statusColors[task.status].border}`}
+            className={`fixed right-0 top-0 h-full w-full border-l-4 bg-userGray2 px-8 py-4 md:h-screen md:w-1/2 lg:w-1/3 ${statusColors[task.status].border}`}
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-x-2 text-sm">
@@ -79,13 +81,13 @@ function Task({ task }: { task: ITask }) {
               {new Date(task.createdAt).toLocaleString()}
             </p>
             {task.comments.length === 0 ? (
-              <p>No comments</p>
+              <p className="mt-4">No comments</p>
             ) : (
               <div className="mt-4">
                 <h3 className="text-lg">Comments</h3>
                 <ul className="text-sm">
                   {task.comments.map((comment) => (
-                    <li key={comment._id}>{comment.text}</li>
+                    <Comment key={comment._id} comment={comment} />
                   ))}
                 </ul>
               </div>

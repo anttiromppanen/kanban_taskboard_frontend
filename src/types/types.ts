@@ -1,5 +1,6 @@
 export type StatusType = "Backlog" | "To do" | "In progress" | "Done";
 export type UserRoles = "admin" | "user";
+export type CommentType = "comment" | "question" | "bug";
 
 export interface IToken {
   token: string;
@@ -7,14 +8,20 @@ export interface IToken {
   role: UserRoles;
 }
 
+export interface IUser {
+  _id: string;
+  username: string;
+}
+
 export interface IComment {
   _id: string;
   text: string;
   commentType: "comment" | "question" | "bug";
-  createdBy: { _id: string; username: string };
+  createdBy: IUser;
   createdAt: Date;
   resolved: boolean | Date;
-  markedResolvedBy: { _id: string; username: string } | null;
+  markedResolvedBy: IUser | null;
+  replies: { _id: string; text: string; createdBy: IUser; createdAt: Date }[];
 }
 
 export interface ITask {
@@ -24,7 +31,7 @@ export interface ITask {
   status: StatusType;
   createdBy: string;
   createdAt: Date;
-  users: { _id: string; username: string }[];
+  users: IUser[];
   comments: IComment[];
 }
 
@@ -33,9 +40,9 @@ export interface ITaskboard {
   name: string;
   description?: string;
   createdAt: Date;
-  createdBy: { username: string };
+  createdBy: IUser;
   tasks: string[];
-  users: { _id: string; username: string }[];
+  users: IUser[];
   admins: string[];
 }
 

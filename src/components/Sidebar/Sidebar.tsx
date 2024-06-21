@@ -14,7 +14,7 @@ function Sidebar() {
   return (
     <aside
       className={`
-        h-dvh w-1/2 bg-userGray2 px-4 py-8 md:h-screen md:w-[300px]
+        min-h-dvh w-1/2 bg-userGray2 px-4 py-8 md:min-h-screen md:w-[300px]
         ${!isOpen && "!w-14"} 
         `}
     >

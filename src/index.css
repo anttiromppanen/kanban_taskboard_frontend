@@ -19,4 +19,8 @@
       #2b2931 20px
     );
   }
+
+  .users-checkbox-label:has(input:checked) {
+    @apply bg-userGreen;
+  }
 }

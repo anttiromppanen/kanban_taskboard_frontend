@@ -38,7 +38,7 @@ function Taskboard() {
       {isError && <p>Error loading taskboard</p>}
       {!isError && !isLoading && (
         <>
-          <h2 className="text-3xl">{data.name}</h2>
+          <h2 className="max-w-5xl break-words text-3xl">{data.name}</h2>
           <div className="mt-4 grid grid-cols-[repeat(4,1fr)] gap-x-4">
             {(["Backlog", "To do", "In progress", "Done"] as StatusType[]).map(
               (status) => (
