@@ -46,4 +46,22 @@ const updateTask = async (
   return response.data;
 };
 
-export { getTaskboard, createTaskboard, updateTask };
+const createComment = async (
+  taskId: string,
+  taskboardId: string,
+  commentText: string,
+  commentType: string,
+  token: IToken,
+) => {
+  const response = await axios.post(
+    `${baseUrl}/${taskboardId}/task/${taskId}/comment`,
+    { comment: commentText, commentType },
+    {
+      headers: { Authorization: createBearerToken(token) },
+    },
+  );
+
+  return response.data;
+};
+
+export { getTaskboard, createTaskboard, updateTask, createComment };

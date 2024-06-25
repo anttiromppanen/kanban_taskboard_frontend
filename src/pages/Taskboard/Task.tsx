@@ -1,17 +1,19 @@
 /* eslint-disable no-underscore-dangle */
 import { useEffect, useRef, useState } from "react";
-import { ChatBubbleLeftIcon } from "@heroicons/react/16/solid";
+import { ChatBubbleLeftIcon, PlusCircleIcon } from "@heroicons/react/16/solid";
 import { draggable } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
 import { ITask } from "../../types/types";
 import AvatarRow from "../../components/AvatarRow";
 import { statusColors } from "../../const/const";
 import Comment from "../../components/TaskComment/Comment";
 import { timeAgoFromDate } from "../../helpers/formatting";
+import NewComment from "./NewComment";
 
 function Task({ task }: { task: ITask }) {
   const ref = useRef<HTMLButtonElement>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [isCommenting, setIsCommenting] = useState(false);
 
   useEffect(() => {
     const el = ref.current;
@@ -53,7 +55,7 @@ function Task({ task }: { task: ITask }) {
         </div>
       </button>
       {isOpen && (
-        <div className="fixed left-0 top-0 h-screen w-full bg-black/50">
+        <aside className="fixed left-0 top-0 h-screen w-full bg-black/50">
           <div
             className={`fixed right-0 top-0 h-full w-full border-l-4 bg-userGray2 px-8 py-4 md:h-screen md:w-1/2 lg:w-1/3 ${statusColors[task.status].border}`}
           >
@@ -84,7 +86,20 @@ function Task({ task }: { task: ITask }) {
               <p className="mt-4">No comments</p>
             ) : (
               <div className="mt-4">
-                <h3 className="text-lg">Comments</h3>
+                <div className="flex items-center gap-x-2">
+                  <h3 className="text-lg">Comments</h3>
+                  <button
+                    type="button"
+                    aria-label="Add comment"
+                    onClick={() => setIsCommenting((state) => !state)}
+                    className="p-1"
+                  >
+                    <PlusCircleIcon className="size-4 text-userGreen" />
+                  </button>
+                </div>
+                {isCommenting && (
+                  <NewComment task={task} setIsCommenting={setIsCommenting} />
+                )}
                 <ul className="text-sm">
                   {task.comments.map((comment) => (
                     <Comment key={comment._id} comment={comment} />
@@ -93,7 +108,7 @@ function Task({ task }: { task: ITask }) {
               </div>
             )}
           </div>
-        </div>
+        </aside>
       )}
     </>
   );

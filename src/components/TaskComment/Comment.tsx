@@ -1,5 +1,5 @@
 /* eslint-disable no-underscore-dangle */
-import { ReactNode, useState } from "react";
+import { ReactNode, useMemo, useState } from "react";
 import {
   BugAntIcon,
   ChatBubbleBottomCenterTextIcon,
@@ -31,7 +31,7 @@ function CommentInfo({
   return (
     <div className="flex items-center gap-x-2">
       <p className="ml-1 font-bold">{username}</p>
-      {"\u25CF"}
+      <span className="text-[8px]">{"\u25CF"}</span>
       <p className="text-[11px] text-neutral-400">
         {timeAgoFromDate(createdAt)}
       </p>
@@ -52,6 +52,7 @@ function Comment({ comment }: { comment: IComment }) {
   } = comment;
 
   const { username } = createdBy;
+  const avatar = useMemo(() => randomAvatar(), []);
 
   return (
     <li className="mt-2">
@@ -59,7 +60,7 @@ function Comment({ comment }: { comment: IComment }) {
         <div className="flex items-center pr-1">
           <div className="size-8 rounded-full border-2 border-neutral-400">
             <img
-              src={randomAvatar()}
+              src={avatar}
               alt="Avatar"
               title={username}
               className="rounded-full bg-userGray1"

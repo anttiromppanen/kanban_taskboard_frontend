@@ -31,6 +31,7 @@ export interface ITask {
   status: StatusType;
   createdBy: string;
   createdAt: Date;
+  taskboardId: string;
   users: IUser[];
   comments: IComment[];
 }
