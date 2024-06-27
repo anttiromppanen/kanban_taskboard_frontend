@@ -5,7 +5,6 @@ import {
   useMemo,
   useState,
 } from "react";
-import axios from "axios";
 import { IToken } from "../types/types";
 
 // Define the interface for the context value
@@ -31,10 +30,8 @@ function AuthProvider({ children }: PropsWithChildren) {
 
   useEffect(() => {
     if (token) {
-      // axios.defaults.headers.common.Authorization = `Bearer ${token}`;
       sessionStorage.setItem("user", JSON.stringify(token));
     } else {
-      // delete axios.defaults.headers.common.Authorization;
       sessionStorage.removeItem("user");
     }
   }, [token]);

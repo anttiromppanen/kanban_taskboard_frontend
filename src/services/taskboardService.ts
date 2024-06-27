@@ -55,7 +55,7 @@ const createComment = async (
 ) => {
   const response = await axios.post(
     `${baseUrl}/${taskboardId}/task/${taskId}/comment`,
-    { comment: commentText, commentType },
+    { text: commentText, commentType },
     {
       headers: { Authorization: createBearerToken(token) },
     },
@@ -64,4 +64,28 @@ const createComment = async (
   return response.data;
 };
 
-export { getTaskboard, createTaskboard, updateTask, createComment };
+const createReply = async (
+  taskboardId: string,
+  taskId: string,
+  commentId: string,
+  replyText: string,
+  token: IToken,
+) => {
+  const response = await axios.post(
+    `${baseUrl}/${taskboardId}/task/${taskId}/comment/${commentId}/reply`,
+    { text: replyText },
+    {
+      headers: { Authorization: createBearerToken(token) },
+    },
+  );
+
+  return response.data;
+};
+
+export {
+  getTaskboard,
+  createTaskboard,
+  updateTask,
+  createComment,
+  createReply,
+};

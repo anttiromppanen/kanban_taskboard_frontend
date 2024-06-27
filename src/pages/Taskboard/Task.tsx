@@ -1,5 +1,5 @@
 /* eslint-disable no-underscore-dangle */
-import { useEffect, useRef, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { ChatBubbleLeftIcon, PlusCircleIcon } from "@heroicons/react/16/solid";
 import { draggable } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
 import { ITask } from "../../types/types";
@@ -8,6 +8,23 @@ import { statusColors } from "../../const/const";
 import Comment from "../../components/TaskComment/Comment";
 import { timeAgoFromDate } from "../../helpers/formatting";
 import NewComment from "./NewComment";
+
+function AddCommentButton({
+  setIsCommenting,
+}: {
+  setIsCommenting: Dispatch<SetStateAction<boolean>>;
+}) {
+  return (
+    <button
+      type="button"
+      aria-label="Add comment"
+      onClick={() => setIsCommenting((state) => !state)}
+      className="p-1"
+    >
+      <PlusCircleIcon className="size-4 text-userGreen" />
+    </button>
+  );
+}
 
 function Task({ task }: { task: ITask }) {
   const ref = useRef<HTMLButtonElement>(null);
@@ -82,31 +99,34 @@ function Task({ task }: { task: ITask }) {
             <p className="text-sm text-neutral-400">
               {new Date(task.createdAt).toLocaleString()}
             </p>
-            {task.comments.length === 0 ? (
-              <p className="mt-4">No comments</p>
-            ) : (
-              <div className="mt-4">
-                <div className="flex items-center gap-x-2">
-                  <h3 className="text-lg">Comments</h3>
-                  <button
-                    type="button"
-                    aria-label="Add comment"
-                    onClick={() => setIsCommenting((state) => !state)}
-                    className="p-1"
-                  >
-                    <PlusCircleIcon className="size-4 text-userGreen" />
-                  </button>
+            <div className="mt-4">
+              {task.comments.length === 0 ? (
+                <div>
+                  <div className="mt-4 flex items-center gap-x-2">
+                    <h3 className="text-lg">No comments</h3>
+                    <AddCommentButton setIsCommenting={setIsCommenting} />
+                  </div>
+                  {isCommenting && (
+                    <NewComment task={task} setIsCommenting={setIsCommenting} />
+                  )}
                 </div>
-                {isCommenting && (
-                  <NewComment task={task} setIsCommenting={setIsCommenting} />
-                )}
-                <ul className="text-sm">
-                  {task.comments.map((comment) => (
-                    <Comment key={comment._id} comment={comment} />
-                  ))}
-                </ul>
-              </div>
-            )}
+              ) : (
+                <div className="mt-4">
+                  <div className="flex items-center gap-x-2">
+                    <h3 className="text-lg">Comments</h3>
+                    <AddCommentButton setIsCommenting={setIsCommenting} />
+                  </div>
+                  {isCommenting && (
+                    <NewComment task={task} setIsCommenting={setIsCommenting} />
+                  )}
+                  <ul className="text-sm">
+                    {task.comments.map((comment) => (
+                      <Comment key={comment._id} comment={comment} />
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
           </div>
         </aside>
       )}
