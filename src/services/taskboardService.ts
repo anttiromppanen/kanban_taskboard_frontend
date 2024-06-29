@@ -82,10 +82,45 @@ const createReply = async (
   return response.data;
 };
 
+const deleteComment = async (
+  taskboardId: string,
+  taskId: string,
+  commentId: string,
+  token: IToken,
+) => {
+  const response = await axios.delete(
+    `${baseUrl}/${taskboardId}/task/${taskId}/comment/${commentId}`,
+    {
+      headers: { Authorization: createBearerToken(token) },
+    },
+  );
+
+  return response.data;
+};
+
+const deleteReply = async (
+  taskboardId: string,
+  taskId: string,
+  commentId: string,
+  replyId: string,
+  token: IToken,
+) => {
+  const response = await axios.delete(
+    `${baseUrl}/${taskboardId}/task/${taskId}/comment/${commentId}/reply/${replyId}`,
+    {
+      headers: { Authorization: createBearerToken(token) },
+    },
+  );
+
+  return response.data;
+};
+
 export {
   getTaskboard,
   createTaskboard,
   updateTask,
   createComment,
   createReply,
+  deleteComment,
+  deleteReply,
 };

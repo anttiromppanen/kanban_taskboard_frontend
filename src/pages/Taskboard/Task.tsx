@@ -1,4 +1,3 @@
-/* eslint-disable no-underscore-dangle */
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { ChatBubbleLeftIcon, PlusCircleIcon } from "@heroicons/react/16/solid";
 import { draggable } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";

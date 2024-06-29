@@ -1,4 +1,3 @@
-/* eslint-disable no-underscore-dangle */
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";

@@ -1,12 +1,11 @@
-/* eslint-disable no-underscore-dangle */
 /* eslint-disable jsx-a11y/label-has-associated-control */
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Field, Form, Formik } from "formik";
 import { Dispatch, SetStateAction } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
-import { IComment, IToken } from "../../types/types";
-import { createReply } from "../../services/taskboardService";
 import useAuth from "../../hooks/useAuth";
+import { createReply } from "../../services/taskboardService";
+import { IComment, IToken } from "../../types/types";
 
 function Reply({
   comment,
@@ -20,7 +19,7 @@ function Reply({
   const { id: taskboardId } = useParams();
   const queryClient = useQueryClient();
 
-  const { mutate } = useMutation({
+  const { mutate: createMutate } = useMutation({
     mutationFn: ({ text }: { text: string }) =>
       createReply(
         taskboardId as string,
@@ -43,7 +42,7 @@ function Reply({
       </p>
       <Formik
         initialValues={{ replyText: "" }}
-        onSubmit={({ replyText }) => mutate({ text: replyText })}
+        onSubmit={({ replyText }) => createMutate({ text: replyText })}
       >
         <Form>
           <label htmlFor="replyText">

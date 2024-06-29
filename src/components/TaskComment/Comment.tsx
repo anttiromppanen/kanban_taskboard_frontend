@@ -1,4 +1,3 @@
-/* eslint-disable no-underscore-dangle */
 import { ReactNode, useMemo, useState } from "react";
 import {
   BugAntIcon,
@@ -7,11 +6,14 @@ import {
   QuestionMarkCircleIcon,
   TrashIcon,
 } from "@heroicons/react/16/solid";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useParams } from "react-router-dom";
 import randomAvatar from "../../helpers/randomAvatar";
-import { CommentType, IComment, IUser } from "../../types/types";
+import { CommentType, IComment, IToken, IUser } from "../../types/types";
 import { timeAgoFromDate } from "../../helpers/formatting";
 import Reply from "./Reply";
 import useAuth from "../../hooks/useAuth";
+import { deleteComment, deleteReply } from "../../services/taskboardService";
 
 const commentTypeIconSelector: Record<CommentType, ReactNode> = {
   question: <QuestionMarkCircleIcon className="size-5 text-neutral-400" />,
@@ -43,6 +45,8 @@ function CommentInfo({
 
 function Comment({ comment }: { comment: IComment }) {
   const { token } = useAuth();
+  const { id: taskboardId } = useParams();
+  const queryClient = useQueryClient();
   const [isReplyOpen, setIsReplyOpen] = useState(false);
   const {
     commentType,
@@ -51,11 +55,39 @@ function Comment({ comment }: { comment: IComment }) {
     markedResolvedBy,
     resolved,
     text,
+    task: taskId,
     replies,
   } = comment;
 
   const { username } = createdBy;
   const avatar = useMemo(() => randomAvatar(), []);
+
+  const { mutate: deleteCommentMutate } = useMutation({
+    mutationFn: () =>
+      deleteComment(
+        taskboardId as string,
+        taskId,
+        comment._id,
+        token as IToken,
+      ),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["Taskboard", taskboardId] });
+    },
+  });
+
+  const { mutate: deleteReplyMutate } = useMutation({
+    mutationFn: ({ replyId }: { replyId: string }) =>
+      deleteReply(
+        taskboardId as string,
+        taskId,
+        comment._id,
+        replyId,
+        token as IToken,
+      ),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["Taskboard", taskboardId] });
+    },
+  });
 
   return (
     <li className="mt-2">
@@ -73,7 +105,11 @@ function Comment({ comment }: { comment: IComment }) {
             <CommentInfo createdBy={createdBy} createdAt={createdAt} />
             <div className="flex items-center gap-x-2">
               {token?.id === createdBy._id && (
-                <button type="button" aria-label="Delete comment">
+                <button
+                  type="button"
+                  aria-label="Delete comment"
+                  onClick={() => deleteCommentMutate()}
+                >
                   <TrashIcon className="size-4 text-red-600" />
                 </button>
               )}
@@ -99,7 +135,11 @@ function Comment({ comment }: { comment: IComment }) {
                 createdAt={reply.createdAt}
               />
               {token?.id === createdBy._id && (
-                <button type="button" aria-label="Delete comment">
+                <button
+                  type="button"
+                  aria-label="Delete comment"
+                  onClick={() => deleteReplyMutate({ replyId: reply._id })}
+                >
                   <TrashIcon className="size-4 text-red-600" />
                 </button>
               )}

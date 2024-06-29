@@ -1,4 +1,3 @@
-/* eslint-disable no-underscore-dangle */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { Field, Form, Formik, FormikProps } from "formik";
 import * as Yup from "yup";

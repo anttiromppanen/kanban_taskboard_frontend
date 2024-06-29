@@ -1,4 +1,3 @@
-/* eslint-disable no-underscore-dangle */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import * as Yup from "yup";
