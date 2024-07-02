@@ -70,7 +70,7 @@ const createComment = async (
 ) => {
   const response = await axios.post(
     `${baseUrl}/${taskboardId}/task/${taskId}/comment`,
-    { comment: commentText, commentType },
+    { text: commentText, commentType },
     {
       headers: { Authorization: createBearerToken(token) },
     },
@@ -79,4 +79,64 @@ const createComment = async (
   return response.data;
 };
 
-export { getTaskboard, createTaskboard, updateTask, createComment, deleteTask };
+const createReply = async (
+  taskboardId: string,
+  taskId: string,
+  commentId: string,
+  replyText: string,
+  token: IToken,
+) => {
+  const response = await axios.post(
+    `${baseUrl}/${taskboardId}/task/${taskId}/comment/${commentId}/reply`,
+    { text: replyText },
+    {
+      headers: { Authorization: createBearerToken(token) },
+    },
+  );
+
+  return response.data;
+};
+
+const deleteComment = async (
+  taskboardId: string,
+  taskId: string,
+  commentId: string,
+  token: IToken,
+) => {
+  const response = await axios.delete(
+    `${baseUrl}/${taskboardId}/task/${taskId}/comment/${commentId}`,
+    {
+      headers: { Authorization: createBearerToken(token) },
+    },
+  );
+
+  return response.data;
+};
+
+const deleteReply = async (
+  taskboardId: string,
+  taskId: string,
+  commentId: string,
+  replyId: string,
+  token: IToken,
+) => {
+  const response = await axios.delete(
+    `${baseUrl}/${taskboardId}/task/${taskId}/comment/${commentId}/reply/${replyId}`,
+    {
+      headers: { Authorization: createBearerToken(token) },
+    },
+  );
+
+  return response.data;
+};
+
+export {
+  getTaskboard,
+  createTaskboard,
+  updateTask,
+  deleteTask,
+  createComment,
+  createReply,
+  deleteComment,
+  deleteReply,
+};

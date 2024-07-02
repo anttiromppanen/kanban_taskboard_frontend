@@ -1,4 +1,3 @@
-/* eslint-disable no-underscore-dangle */
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import TaskboardFrame from "../../components/TaskboardFrame";

@@ -1,15 +1,19 @@
-/* eslint-disable no-underscore-dangle */
 import { ReactNode, useMemo, useState } from "react";
 import {
   BugAntIcon,
   ChatBubbleBottomCenterTextIcon,
   CheckCircleIcon,
   QuestionMarkCircleIcon,
+  TrashIcon,
 } from "@heroicons/react/16/solid";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useParams } from "react-router-dom";
 import randomAvatar from "../../helpers/randomAvatar";
-import { CommentType, IComment, IUser } from "../../types/types";
+import { CommentType, IComment, IToken, IUser } from "../../types/types";
 import { timeAgoFromDate } from "../../helpers/formatting";
 import Reply from "./Reply";
+import useAuth from "../../hooks/useAuth";
+import { deleteComment, deleteReply } from "../../services/taskboardService";
 
 const commentTypeIconSelector: Record<CommentType, ReactNode> = {
   question: <QuestionMarkCircleIcon className="size-5 text-neutral-400" />,
@@ -40,6 +44,9 @@ function CommentInfo({
 }
 
 function Comment({ comment }: { comment: IComment }) {
+  const { token } = useAuth();
+  const { id: taskboardId } = useParams();
+  const queryClient = useQueryClient();
   const [isReplyOpen, setIsReplyOpen] = useState(false);
   const {
     commentType,
@@ -48,11 +55,39 @@ function Comment({ comment }: { comment: IComment }) {
     markedResolvedBy,
     resolved,
     text,
+    task: taskId,
     replies,
   } = comment;
 
   const { username } = createdBy;
   const avatar = useMemo(() => randomAvatar(), []);
+
+  const { mutate: deleteCommentMutate } = useMutation({
+    mutationFn: () =>
+      deleteComment(
+        taskboardId as string,
+        taskId,
+        comment._id,
+        token as IToken,
+      ),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["Taskboard", taskboardId] });
+    },
+  });
+
+  const { mutate: deleteReplyMutate } = useMutation({
+    mutationFn: ({ replyId }: { replyId: string }) =>
+      deleteReply(
+        taskboardId as string,
+        taskId,
+        comment._id,
+        replyId,
+        token as IToken,
+      ),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["Taskboard", taskboardId] });
+    },
+  });
 
   return (
     <li className="mt-2">
@@ -68,14 +103,25 @@ function Comment({ comment }: { comment: IComment }) {
           </div>
           <div className="ml-2 flex w-full items-center justify-between">
             <CommentInfo createdBy={createdBy} createdAt={createdAt} />
-            <button
-              type="button"
-              aria-label={`Reply to ${createdBy.username}`}
-              title={`Reply to ${createdBy.username}`}
-              onClick={() => setIsReplyOpen((state) => !state)}
-            >
-              {commentTypeIconSelector[commentType]}
-            </button>
+            <div className="flex items-center gap-x-2">
+              {token?.id === createdBy._id && (
+                <button
+                  type="button"
+                  aria-label="Delete comment"
+                  onClick={() => deleteCommentMutate()}
+                >
+                  <TrashIcon className="size-4 text-red-600" />
+                </button>
+              )}
+              <button
+                type="button"
+                aria-label={`Reply to ${createdBy.username}`}
+                title={`Reply to ${createdBy.username}`}
+                onClick={() => setIsReplyOpen((state) => !state)}
+              >
+                {commentTypeIconSelector[commentType]}
+              </button>
+            </div>
           </div>
         </div>
         <div className="ml-10 rounded-md bg-userGray1/50 p-2 text-xs text-neutral-300">
@@ -83,10 +129,21 @@ function Comment({ comment }: { comment: IComment }) {
         </div>
         {replies.map((reply) => (
           <div key={reply._id} className="ml-14 mt-1">
-            <CommentInfo
-              createdBy={reply.createdBy}
-              createdAt={reply.createdAt}
-            />
+            <div className="flex items-center justify-between pr-1">
+              <CommentInfo
+                createdBy={reply.createdBy}
+                createdAt={reply.createdAt}
+              />
+              {token?.id === createdBy._id && (
+                <button
+                  type="button"
+                  aria-label="Delete comment"
+                  onClick={() => deleteReplyMutate({ replyId: reply._id })}
+                >
+                  <TrashIcon className="size-4 text-red-600" />
+                </button>
+              )}
+            </div>
             <div className="mt-1.5 rounded-md bg-userGray1/50 p-2 text-xs text-neutral-300">
               {reply.text}
             </div>

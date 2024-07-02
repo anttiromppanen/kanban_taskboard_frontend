@@ -1,4 +1,3 @@
-/* eslint-disable no-underscore-dangle */
 import { UserIcon } from "@heroicons/react/16/solid";
 import randomAvatar from "../helpers/randomAvatar";
 

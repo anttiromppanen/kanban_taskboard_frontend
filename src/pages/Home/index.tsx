@@ -1,4 +1,3 @@
-/* eslint-disable no-underscore-dangle */
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import AvatarRow from "../../components/AvatarRow";

@@ -4,6 +4,7 @@ export type CommentType = "comment" | "question" | "bug";
 
 export interface IToken {
   token: string;
+  id: string;
   username: string;
   role: UserRoles;
 }
@@ -16,6 +17,7 @@ export interface IUser {
 export interface IComment {
   _id: string;
   text: string;
+  task: string;
   commentType: "comment" | "question" | "bug";
   createdBy: IUser;
   createdAt: Date;
