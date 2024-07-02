@@ -9,6 +9,7 @@ import useTasksByStatus from "../../hooks/useTasksByStatus";
 import { getTaskboard } from "../../services/taskboardService";
 import { ITask, IToken, StatusType } from "../../types/types";
 import TaskStatusColumn from "./TaskStatusColumn";
+import NewTaskForm from "./NewTaskForm";
 
 function Taskboard() {
   const [isOpen, setIsOpen] = useState(false);
@@ -30,7 +31,7 @@ function Taskboard() {
         <>
           {isOpen && (
             <OverlayForm formHeading="Add new task" setIsOpen={setIsOpen}>
-              <p>Form goes here</p>
+              <NewTaskForm />
             </OverlayForm>
           )}
           <div className="flex items-center justify-between">

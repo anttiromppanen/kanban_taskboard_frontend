@@ -20,6 +20,14 @@
     );
   }
 
+  .horizontal-inputs-parent {
+    @apply mt-3 flex flex-wrap gap-x-2 gap-y-5;
+  }
+
+  .rounded-input {
+    @apply users-checkbox-label cursor-pointer rounded-full bg-userLightBlue/100 px-4 py-2 text-sm text-black hover:brightness-110;
+  }
+
   .users-checkbox-label:has(input:checked) {
     @apply bg-userGreen;
   }

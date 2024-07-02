@@ -132,28 +132,27 @@ function NewTaskboardForm() {
             {isGetUsersLoading && <p>Loading users...</p>}
             {isGetUsersError && <p>Error finding users...</p>}
             {!isGetUsersLoading && !isGetUsersError && (
-              <div className="mt-3 flex flex-wrap gap-x-2 gap-y-5">
+              <div
+                role="group"
+                aria-labelledby="checkbox-group"
+                className="horizontal-inputs-parent"
+              >
                 {users &&
                   users.map((user: IUser) => (
-                    <div
+                    <label
                       key={user._id}
-                      role="group"
-                      aria-labelledby="checkbox-group"
+                      htmlFor={user._id}
+                      className="rounded-input"
                     >
-                      <label
-                        htmlFor={user._id}
-                        className="users-checkbox-label cursor-pointer rounded-full bg-userLightBlue/100 px-4 py-2 text-sm text-black hover:brightness-110"
-                      >
-                        <Field
-                          id={user._id}
-                          type="checkbox"
-                          name="addedUsers"
-                          value={user._id}
-                          className="appearance-none"
-                        />
-                        {user.username}
-                      </label>
-                    </div>
+                      <Field
+                        id={user._id}
+                        type="checkbox"
+                        name="addedUsers"
+                        value={user._id}
+                        className="appearance-none"
+                      />
+                      {user.username}
+                    </label>
                   ))}
               </div>
             )}
