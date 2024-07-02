@@ -46,6 +46,21 @@ const updateTask = async (
   return response.data;
 };
 
+const deleteTask = async (
+  taskId: string,
+  taskboardId: string,
+  token: IToken,
+) => {
+  const response = await axios.delete(
+    `${baseUrl}/${taskboardId}/task/${taskId}`,
+    {
+      headers: { Authorization: createBearerToken(token) },
+    },
+  );
+
+  return response.data;
+};
+
 const createComment = async (
   taskId: string,
   taskboardId: string,
@@ -64,4 +79,4 @@ const createComment = async (
   return response.data;
 };
 
-export { getTaskboard, createTaskboard, updateTask, createComment };
+export { getTaskboard, createTaskboard, updateTask, createComment, deleteTask };

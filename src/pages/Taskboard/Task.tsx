@@ -1,19 +1,44 @@
 /* eslint-disable no-underscore-dangle */
-import { useEffect, useRef, useState } from "react";
-import { ChatBubbleLeftIcon, PlusCircleIcon } from "@heroicons/react/16/solid";
+import {
+  MouseEvent,
+  MouseEventHandler,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import {
+  ChatBubbleLeftIcon,
+  PlusCircleIcon,
+  TrashIcon,
+} from "@heroicons/react/16/solid";
 import { draggable } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
-import { ITask } from "../../types/types";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { ITask, IToken } from "../../types/types";
 import AvatarRow from "../../components/AvatarRow";
 import { statusColors } from "../../const/const";
 import Comment from "../../components/TaskComment/Comment";
 import { timeAgoFromDate } from "../../helpers/formatting";
 import NewComment from "./NewComment";
+import useAuth from "../../hooks/useAuth";
+import { deleteTask } from "../../services/taskboardService";
 
 function Task({ task }: { task: ITask }) {
   const ref = useRef<HTMLButtonElement>(null);
+  const queryClient = useQueryClient();
+  const { token } = useAuth();
   const [isDragging, setIsDragging] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isCommenting, setIsCommenting] = useState(false);
+
+  const { mutate: deleteMutation } = useMutation({
+    mutationFn: () => deleteTask(task._id, task.taskboardId, token as IToken),
+    onSuccess: () => {
+      setIsOpen(false);
+      queryClient.invalidateQueries({
+        queryKey: ["Taskboard", task.taskboardId],
+      });
+    },
+  });
 
   useEffect(() => {
     const el = ref.current;
@@ -26,6 +51,11 @@ function Task({ task }: { task: ITask }) {
       onDrop: () => setIsDragging(false),
     });
   }, [task]);
+
+  const handleTaskDelete: MouseEventHandler<HTMLButtonElement> = (e) => {
+    e.stopPropagation();
+    deleteMutation();
+  };
 
   return (
     <>
@@ -53,6 +83,17 @@ function Task({ task }: { task: ITask }) {
             {task.comments.length} <ChatBubbleLeftIcon className="size-4" />
           </div>
         </div>
+        {token && token.role === "admin" && (
+          <div className="mt-2 flex w-full items-center">
+            <button
+              type="button"
+              onClick={handleTaskDelete}
+              className="flex items-center gap-x-1 rounded-md bg-userPink/60 px-2 py-1 text-xs text-neutral-100"
+            >
+              <TrashIcon className="size-4 text-neutral-200" /> Delete
+            </button>
+          </div>
+        )}
       </button>
       {isOpen && (
         <aside className="fixed left-0 top-0 h-screen w-full bg-black/50">
