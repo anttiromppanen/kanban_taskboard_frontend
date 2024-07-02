@@ -40,7 +40,7 @@ function AddCommentButton({
 }
 
 function Task({ task }: { task: ITask }) {
-  const ref = useRef<HTMLButtonElement>(null);
+  const ref = useRef<HTMLDivElement>(null);
   const queryClient = useQueryClient();
   const { token } = useAuth();
   const [isDragging, setIsDragging] = useState(false);
@@ -76,12 +76,16 @@ function Task({ task }: { task: ITask }) {
 
   return (
     <>
-      <button
+      <div
         ref={ref}
-        type="button"
-        onClick={() => setIsOpen(true)}
-        className={`w-full rounded-md bg-userGray2 p-3 text-left opacity-100 ${isDragging && "opacity-30"}`}
+        className={`relative w-full rounded-md bg-userGray2 p-3 text-left opacity-100 ${isDragging && "opacity-30"}`}
       >
+        <button
+          type="button"
+          onClick={() => setIsOpen(true)}
+          aria-label="Open task"
+          className="absolute left-0 top-0 z-0 h-full w-full"
+        />
         <div className="flex items-center justify-between">
           <h4>{task.title}</h4>
           <div
@@ -105,13 +109,13 @@ function Task({ task }: { task: ITask }) {
             <button
               type="button"
               onClick={handleTaskDelete}
-              className="flex items-center gap-x-1 rounded-md bg-userPink/60 px-2 py-1 text-xs text-neutral-100"
+              className="relative z-10 flex items-center gap-x-1 rounded-md bg-userPink/60 px-2 py-1 text-xs text-neutral-100"
             >
               <TrashIcon className="size-4 text-neutral-200" /> Delete
             </button>
           </div>
         )}
-      </button>
+      </div>
       {isOpen && (
         <aside className="fixed left-0 top-0 h-screen w-full bg-black/50">
           <div

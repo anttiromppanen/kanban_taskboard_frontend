@@ -1,36 +1,9 @@
-import {
-  ChevronDownIcon,
-  PlusIcon,
-  XMarkIcon,
-} from "@heroicons/react/16/solid";
-import { Dispatch, SetStateAction, useState } from "react";
+import { ChevronDownIcon, PlusIcon } from "@heroicons/react/16/solid";
+import { useState } from "react";
 import useAuth from "../../hooks/useAuth";
 import HeaderNav from "../HeaderNav";
+import OverlayForm from "../OverlayForm";
 import NewTaskboardForm from "./NewTaskboardForm/NewTaskboardForm";
-
-function NewTaskboardOverlay({
-  setIsOpen,
-}: {
-  setIsOpen: Dispatch<SetStateAction<boolean>>;
-}) {
-  return (
-    <div className="fixed left-0 top-0 z-10 flex h-dvh w-full items-center justify-center bg-black/80 text-neutral-300 md:h-screen">
-      <div className="h-full w-full overflow-y-auto rounded-md bg-userGray2 p-8 md:h-[500px] md:w-[500px]">
-        <div className="flex items-center justify-between">
-          <h3>Add new taskboard</h3>
-          <button
-            type="button"
-            aria-label="Close"
-            onClick={() => setIsOpen(false)}
-          >
-            <XMarkIcon className="size-8" />
-          </button>
-        </div>
-        <NewTaskboardForm />
-      </div>
-    </div>
-  );
-}
 
 function TaskboardHeader() {
   const [isOpen, setIsOpen] = useState(false);
@@ -38,7 +11,11 @@ function TaskboardHeader() {
 
   return (
     <>
-      {isOpen && <NewTaskboardOverlay setIsOpen={setIsOpen} />}
+      {isOpen && (
+        <OverlayForm formHeading="Add new taskboard" setIsOpen={setIsOpen}>
+          <NewTaskboardForm />
+        </OverlayForm>
+      )}
       <div className="flex justify-between">
         <HeaderNav title="TaskboardSection" />
         {/* USER PROFILE */}
