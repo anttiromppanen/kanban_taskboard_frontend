@@ -1,13 +1,17 @@
-import { useQuery } from "@tanstack/react-query";
-import { useParams } from "react-router-dom";
 import { PencilSquareIcon } from "@heroicons/react/16/solid";
+import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import { useParams } from "react-router-dom";
+import OverlayForm from "../../components/OverlayForm";
 import TaskboardFrame from "../../components/TaskboardFrame";
 import useAuth from "../../hooks/useAuth";
+import useTasksByStatus from "../../hooks/useTasksByStatus";
 import { getTaskboard } from "../../services/taskboardService";
-import { ITask, IToken, StatusType, TasksByStatus } from "../../types/types";
+import { ITask, IToken, StatusType } from "../../types/types";
 import TaskStatusColumn from "./TaskStatusColumn";
 
 function Taskboard() {
+  const [isOpen, setIsOpen] = useState(false);
   const { id } = useParams();
   const { token } = useAuth();
 
@@ -16,21 +20,7 @@ function Taskboard() {
     queryFn: () => getTaskboard(id as string, token as IToken),
   });
 
-  // Using reduce to map tasks by status
-  const tasksByStatus: Record<StatusType, ITask[]> =
-    data &&
-    data.tasks.reduce(
-      (acc: TasksByStatus, task: ITask) => {
-        acc[task.status].push(task);
-        return acc;
-      },
-      {
-        Backlog: [],
-        "To do": [],
-        "In progress": [],
-        Done: [],
-      } as TasksByStatus,
-    );
+  const tasksByStatus = useTasksByStatus(data?.tasks as ITask[]);
 
   return (
     <TaskboardFrame>
@@ -38,10 +28,16 @@ function Taskboard() {
       {isError && <p>Error loading taskboard</p>}
       {!isError && !isLoading && (
         <>
+          {isOpen && (
+            <OverlayForm formHeading="Add new task" setIsOpen={setIsOpen}>
+              <p>Form goes here</p>
+            </OverlayForm>
+          )}
           <div className="flex items-center justify-between">
             <h2 className="max-w-5xl break-words text-3xl">{data.name}</h2>
             <button
               type="button"
+              onClick={() => setIsOpen(true)}
               className="flex items-center gap-x-2 rounded-md bg-green-600 px-2 py-1 text-white hover:brightness-110"
             >
               <PencilSquareIcon className="size-4" /> New task
