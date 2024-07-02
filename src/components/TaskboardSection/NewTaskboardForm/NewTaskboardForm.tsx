@@ -1,14 +1,15 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import * as Yup from "yup";
-import { Field, Form, Formik, FormikProps } from "formik";
-import { useRef, useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
-import { getAllUsers } from "../../../services/userService";
-import useAuth from "../../../hooks/useAuth";
-import { IToken, IUser } from "../../../types/types";
-import { createTaskboard } from "../../../services/taskboardService";
+import { Form, Formik, FormikProps } from "formik";
+import { useRef, useState } from "react";
+import * as Yup from "yup";
 import { formatAxiosError } from "../../../helpers/formatting";
+import useAuth from "../../../hooks/useAuth";
+import { createTaskboard } from "../../../services/taskboardService";
+import { IToken, IUser } from "../../../types/types";
+import StyledTextInput from "../../Form/StyledTextInput";
+import UsersCheckboxGroup from "../../Form/UsersCheckboxGroup";
 
 const NewTaskboardSchema = Yup.object().shape({
   name: Yup.string().required("Name required"),
@@ -33,15 +34,6 @@ function NewTaskboardForm() {
   const [submitSuccessText, setSubmitSuccessText] = useState("");
   const formRef = useRef<FormikProps<IHandleSubmitParams>>(null);
   const { token } = useAuth();
-
-  const {
-    data: users,
-    isLoading: isGetUsersLoading,
-    isError: isGetUsersError,
-  } = useQuery({
-    queryKey: ["allUsers"],
-    queryFn: () => getAllUsers(token as IToken),
-  });
 
   const { mutate } = useMutation({
     mutationFn: ({
@@ -104,58 +96,23 @@ function NewTaskboardForm() {
           {submitSuccessText.length > 0 && (
             <p className="text-green-400">{submitSuccessText}</p>
           )}
-          <div className="flex flex-col gap-y-1">
-            <label htmlFor="name">Name</label>
-            <Field
-              id="name"
-              name="name"
-              placeholder="Enter name for taskboard..."
-              className="rounded-md bg-userGray1 px-4 py-2 placeholder:text-sm placeholder:text-neutral-500"
-            />
-            {errors.name && touched.name && (
-              <div className="pl-2 text-red-400">{errors.name}</div>
-            )}
-          </div>
-          <div className="flex flex-col gap-y-1">
-            <label htmlFor="description">Description</label>
-            <Field
-              name="description"
-              id="description"
-              as="textarea"
-              rows="3"
-              placeholder="Enter description..."
-              className="rounded-md bg-userGray1 px-4 py-2 placeholder:text-sm placeholder:text-neutral-500"
-            />
-          </div>
+          <StyledTextInput<IHandleSubmitParams>
+            label="Name"
+            name="name"
+            placeholder="Enter name for taskboard..."
+            errors={errors}
+            touched={touched}
+          />
+          <StyledTextInput<IHandleSubmitParams>
+            label="Description"
+            name="description"
+            textarea
+            placeholder="Enter description..."
+            errors={errors}
+            touched={touched}
+          />
           <div>
-            <h4>Add users</h4>
-            {isGetUsersLoading && <p>Loading users...</p>}
-            {isGetUsersError && <p>Error finding users...</p>}
-            {!isGetUsersLoading && !isGetUsersError && (
-              <div
-                role="group"
-                aria-labelledby="checkbox-group"
-                className="horizontal-inputs-parent"
-              >
-                {users &&
-                  users.map((user: IUser) => (
-                    <label
-                      key={user._id}
-                      htmlFor={user._id}
-                      className="rounded-input"
-                    >
-                      <Field
-                        id={user._id}
-                        type="checkbox"
-                        name="addedUsers"
-                        value={user._id}
-                        className="appearance-none"
-                      />
-                      {user.username}
-                    </label>
-                  ))}
-              </div>
-            )}
+            <UsersCheckboxGroup />
           </div>
           <button
             type="submit"

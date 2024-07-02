@@ -1,9 +1,13 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import { Form, Formik, FormikProps } from "formik";
+import { Field, Form, Formik, FormikProps } from "formik";
 import { useRef } from "react";
 import * as Yup from "yup";
+import { useQuery } from "@tanstack/react-query";
 import StyledTextInput from "../../components/Form/StyledTextInput";
-import { IUser, StatusType } from "../../types/types";
+import { IToken, IUser, StatusType } from "../../types/types";
+import { getAllUsers } from "../../services/userService";
+import useAuth from "../../hooks/useAuth";
+import UsersCheckboxGroup from "../../components/Form/UsersCheckboxGroup";
 
 const validStatuses: StatusType[] = ["Backlog", "To do", "In progress", "Done"];
 
@@ -23,7 +27,17 @@ interface IHandleSubmitParams {
 }
 
 function NewTaskForm() {
+  const { token } = useAuth();
   const formRef = useRef<FormikProps<IHandleSubmitParams>>(null);
+
+  const {
+    data: users,
+    isLoading: isGetUsersLoading,
+    isError: isGetUsersError,
+  } = useQuery({
+    queryKey: ["allUsers"],
+    queryFn: () => getAllUsers(token as IToken),
+  });
 
   return (
     <Formik
@@ -54,6 +68,29 @@ function NewTaskForm() {
             errors={errors}
             touched={touched}
           />
+          <div>
+            <h4>Status</h4>
+            <div
+              role="group"
+              aria-labelledby="checkbox-group"
+              className="horizontal-inputs-parent"
+            >
+              {validStatuses.map((status) => (
+                <label key={status} className="rounded-input">
+                  <Field
+                    type="radio"
+                    name="status"
+                    value={status}
+                    className="appearance-none"
+                  />
+                  {status}
+                </label>
+              ))}
+            </div>
+          </div>
+          <div>
+            <UsersCheckboxGroup />
+          </div>
           <button
             type="submit"
             className="mt-6 w-full rounded-md bg-userPurple py-2"
