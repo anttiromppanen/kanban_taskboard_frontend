@@ -2,7 +2,7 @@ import { PencilSquareIcon } from "@heroicons/react/16/solid";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
-import OverlayForm from "../../components/OverlayForm";
+import OverlayForm from "../../components/Form/OverlayForm";
 import TaskboardFrame from "../../components/TaskboardFrame";
 import useAuth from "../../hooks/useAuth";
 import useTasksByStatus from "../../hooks/useTasksByStatus";

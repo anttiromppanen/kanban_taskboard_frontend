@@ -117,7 +117,7 @@ function Task({ task }: { task: ITask }) {
         )}
       </div>
       {isOpen && (
-        <aside className="fixed left-0 top-0 h-screen w-full bg-black/50">
+        <aside className="fixed left-0 top-0 z-20 h-screen w-full bg-black/50">
           <div
             className={`fixed right-0 top-0 h-full w-full border-l-4 bg-userGray2 px-8 py-4 md:h-screen md:w-1/2 lg:w-1/3 ${statusColors[task.status].border}`}
           >

@@ -27,6 +27,25 @@ const createTaskboard = async (
   return response.data;
 };
 
+const createTask = async (
+  taskboardId: string,
+  title: string,
+  description: string,
+  status: StatusType,
+  users: IUser[],
+  token: IToken,
+) => {
+  const response = await axios.post(
+    `${baseUrl}/${taskboardId}/task`,
+    { title, description, status, users },
+    {
+      headers: { Authorization: createBearerToken(token) },
+    },
+  );
+
+  return response.data;
+};
+
 const updateTask = async (
   taskId: string,
   taskboardId: string,
@@ -133,6 +152,7 @@ const deleteReply = async (
 export {
   getTaskboard,
   createTaskboard,
+  createTask,
   updateTask,
   deleteTask,
   createComment,

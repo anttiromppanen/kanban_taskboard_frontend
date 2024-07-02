@@ -114,10 +114,7 @@ function NewTaskboardForm() {
           <div>
             <UsersCheckboxGroup />
           </div>
-          <button
-            type="submit"
-            className="mt-6 w-full rounded-md bg-userPurple py-2"
-          >
+          <button type="submit" className="form-button">
             Add
           </button>
         </Form>

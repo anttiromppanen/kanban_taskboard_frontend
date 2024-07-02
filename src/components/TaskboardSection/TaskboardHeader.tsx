@@ -2,7 +2,7 @@ import { ChevronDownIcon, PlusIcon } from "@heroicons/react/16/solid";
 import { useState } from "react";
 import useAuth from "../../hooks/useAuth";
 import HeaderNav from "../HeaderNav";
-import OverlayForm from "../OverlayForm";
+import OverlayForm from "../Form/OverlayForm";
 import NewTaskboardForm from "./NewTaskboardForm/NewTaskboardForm";
 
 function TaskboardHeader() {

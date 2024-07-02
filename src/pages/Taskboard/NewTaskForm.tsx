@@ -1,13 +1,16 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { Field, Form, Formik, FormikProps } from "formik";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import * as Yup from "yup";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { AxiosError } from "axios";
+import { useParams } from "react-router-dom";
 import StyledTextInput from "../../components/Form/StyledTextInput";
-import { IToken, IUser, StatusType } from "../../types/types";
-import { getAllUsers } from "../../services/userService";
-import useAuth from "../../hooks/useAuth";
 import UsersCheckboxGroup from "../../components/Form/UsersCheckboxGroup";
+import { IToken, IUser, StatusType } from "../../types/types";
+import { createTask } from "../../services/taskboardService";
+import { formatAxiosError } from "../../helpers/formatting";
+import useAuth from "../../hooks/useAuth";
 
 const validStatuses: StatusType[] = ["Backlog", "To do", "In progress", "Done"];
 
@@ -27,16 +30,35 @@ interface IHandleSubmitParams {
 }
 
 function NewTaskForm() {
-  const { token } = useAuth();
+  const queryClient = useQueryClient();
+  const [submitErrorText, setSubmitErrorText] = useState("");
+  const [submitSuccessText, setSubmitSuccessText] = useState("");
+  const { id: taskboardId } = useParams();
   const formRef = useRef<FormikProps<IHandleSubmitParams>>(null);
+  const { token } = useAuth();
 
-  const {
-    data: users,
-    isLoading: isGetUsersLoading,
-    isError: isGetUsersError,
-  } = useQuery({
-    queryKey: ["allUsers"],
-    queryFn: () => getAllUsers(token as IToken),
+  const { mutate: createTaskMutation } = useMutation({
+    mutationFn: (values: IHandleSubmitParams) =>
+      createTask(
+        taskboardId as string,
+        values.title,
+        values.description,
+        values.status,
+        values.addedUsers,
+        token as IToken,
+      ),
+    onError: (error: AxiosError) => {
+      formatAxiosError(error, setSubmitErrorText);
+    },
+    onSuccess: () => {
+      setSubmitSuccessText("Task created successfully");
+      queryClient.invalidateQueries({ queryKey: ["Taskboard", taskboardId] });
+      formRef.current?.resetForm();
+    },
+    onSettled: () => {
+      setTimeout(() => setSubmitErrorText(""), 5000);
+      setTimeout(() => setSubmitSuccessText(""), 5000);
+    },
   });
 
   return (
@@ -49,10 +71,16 @@ function NewTaskForm() {
         addedUsers: [],
       }}
       validationSchema={NewTaskSchema}
-      onSubmit={(values) => console.log(values)}
+      onSubmit={(values) => createTaskMutation(values)}
     >
       {({ errors, touched }) => (
         <Form className="mt-4 flex flex-col gap-y-4">
+          {submitErrorText.length > 0 && (
+            <p className="text-red-400">{submitErrorText}</p>
+          )}
+          {submitSuccessText.length > 0 && (
+            <p className="text-green-400">{submitSuccessText}</p>
+          )}
           <StyledTextInput<IHandleSubmitParams>
             label="Title"
             name="title"
@@ -91,10 +119,7 @@ function NewTaskForm() {
           <div>
             <UsersCheckboxGroup />
           </div>
-          <button
-            type="submit"
-            className="mt-6 w-full rounded-md bg-userPurple py-2"
-          >
+          <button type="submit" className="form-button">
             Add
           </button>
         </Form>

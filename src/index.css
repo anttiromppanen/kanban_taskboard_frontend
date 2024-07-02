@@ -28,6 +28,10 @@
     @apply users-checkbox-label cursor-pointer rounded-full bg-userLightBlue/100 px-4 py-2 text-sm text-black hover:brightness-110;
   }
 
+  .form-button {
+    @apply mt-6 w-full rounded-md bg-userPurple py-2;
+  }
+
   .users-checkbox-label:has(input:checked) {
     @apply bg-userGreen;
   }
