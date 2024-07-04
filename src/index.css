@@ -32,6 +32,10 @@
     @apply mt-6 w-full rounded-md bg-userPurple py-2;
   }
 
+  .overlay-bg {
+    @apply fixed left-0 top-0 z-20 h-dvh w-full bg-black/80 text-neutral-300 md:h-screen
+  }
+
   .users-checkbox-label:has(input:checked) {
     @apply bg-userGreen;
   }
