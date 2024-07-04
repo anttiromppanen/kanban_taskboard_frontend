@@ -10,15 +10,9 @@ function HeaderNav({ title }: { title: string }) {
   return (
     <div className="flex items-center gap-x-4 text-neutral-200">
       <button type="button" aria-label="Go back" onClick={handleBackClick}>
-        <ArrowLeftCircleIcon className="size-7 text-neutral-500" />
-      </button>
-      <button
-        type="button"
-        aria-label="Go back"
-        onClick={() => navigate(+1)}
-        className="rotate-180"
-      >
-        <ArrowLeftCircleIcon className="size-7 text-neutral-500" />
+        <ArrowLeftCircleIcon
+          className={`size-7 text-neutral-400 ${location.pathname === "/" && "text-neutral-500"}`}
+        />
       </button>
       <h1>{title}</h1>
     </div>

@@ -5,6 +5,7 @@ import {
   DocumentTextIcon,
 } from "@heroicons/react/16/solid";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -21,14 +22,14 @@ function Sidebar() {
       <div
         className={`flex items-center justify-between text-neutral-200 ${!isOpen && "flex-col gap-y-4"}`}
       >
-        <a href="/" className="flex items-center gap-x-1 rounded-lg">
+        <Link to="/" className="flex items-center gap-x-1 rounded-lg">
           <CircleStackIcon className="size-7 text-userPurple" />
           <p
             className={`hidden font-userLogoFont text-2xl font-light ${isOpen && "!block"}`}
           >
             Kanban
           </p>
-        </a>
+        </Link>
         <button
           type="button"
           onClick={handleToggleOpen}
