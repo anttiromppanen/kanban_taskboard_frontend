@@ -11,12 +11,14 @@ import { IToken } from "../types/types";
 interface AuthContextType {
   token: IToken | null;
   setTokenFunc: (newToken: IToken) => void;
+  removeTokenFunc: () => void;
 }
 
 // Provide a default value for the context
 export const AuthContext = createContext<AuthContextType>({
   token: null,
   setTokenFunc: () => {},
+  removeTokenFunc: () => {},
 });
 
 function AuthProvider({ children }: PropsWithChildren) {
@@ -26,6 +28,11 @@ function AuthProvider({ children }: PropsWithChildren) {
 
   const setTokenFunc = (newToken: IToken) => {
     setToken(newToken);
+  };
+
+  const removeTokenFunc = () => {
+    setToken(null);
+    sessionStorage.removeItem("user");
   };
 
   useEffect(() => {
@@ -41,6 +48,7 @@ function AuthProvider({ children }: PropsWithChildren) {
     () => ({
       token,
       setTokenFunc,
+      removeTokenFunc,
     }),
     [token],
   );
