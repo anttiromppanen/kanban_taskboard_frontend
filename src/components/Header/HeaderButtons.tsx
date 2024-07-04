@@ -1,12 +1,14 @@
 import { ChevronDownIcon, PlusIcon } from "@heroicons/react/16/solid";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import useAuth from "../../hooks/useAuth";
+import UserMenu from "./UserMenu";
 
 function HeaderButtons({
   setIsOpen,
 }: {
   setIsOpen: Dispatch<SetStateAction<boolean>>;
 }) {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { token } = useAuth();
 
   return (
@@ -22,10 +24,13 @@ function HeaderButtons({
           <PlusIcon className="size-4 text-white" />
         </button>
       )}
-      <button
-        type="button"
-        className="flex items-center gap-x-2 text-neutral-300"
-      >
+      <div className="relative flex items-center gap-x-2 text-neutral-300">
+        <button
+          type="button"
+          aria-label="Toggle user menu"
+          onClick={() => setIsMenuOpen((prev) => !prev)}
+          className="absolute left-0 top-0 h-full w-full"
+        />
         <img
           src="https://i.pravatar.cc/50"
           alt="Avatar"
@@ -35,7 +40,8 @@ function HeaderButtons({
           <p>{token?.username}</p>
           <ChevronDownIcon className="size-4" />
         </div>
-      </button>
+        {isMenuOpen && <UserMenu />}
+      </div>
     </div>
   );
 }
