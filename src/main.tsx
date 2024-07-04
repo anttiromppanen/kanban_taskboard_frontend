@@ -5,7 +5,7 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import AuthProvider from "./components/AuthProvider";
 import ErrorPage from "./components/ErrorPage";
-import HeaderNav from "./components/HeaderNav/HeaderNav";
+import HeaderNav from "./components/Header/HeaderNav";
 import Login from "./components/Login/Login";
 import ProtectedRoute from "./components/ProtectedRoute";
 import "./index.css";
