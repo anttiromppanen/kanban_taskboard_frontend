@@ -7,7 +7,13 @@ function Login() {
   const [successText, setSuccessText] = useState("");
 
   return (
-    <div className="fixed left-0 top-0 z-10 flex h-dvh w-full items-center justify-center bg-black/80 md:h-screen">
+    <div
+      className="
+        fixed left-0 top-0 flex h-dvh w-full items-center justify-center bg-userLoginBgMobile
+        bg-cover bg-center md:h-screen md:bg-userLoginBgDesktop
+      "
+    >
+      <div className="absolute -z-10 h-full w-full bg-black bg-opacity-90 backdrop-blur-sm" />
       <div>
         <h1 className="mb-10 text-center font-userLogoFont text-5xl text-white">
           Kanban taskboards
@@ -25,9 +31,9 @@ function Login() {
           </div>
           <div
             className={`
-            invisible mb-3 mt-2 rounded-md p-2 text-center 
-            ${errorText && "!visible bg-red-500"}
-            ${successText && "!visible bg-green-500"}`}
+            invisible mb-3 mt-2 rounded-md bg-black/60 p-2 text-center
+            ${errorText && "!visible text-red-500"}
+            ${successText && "!visible text-green-500"}`}
           >
             {errorText || successText || "¤"}
           </div>
