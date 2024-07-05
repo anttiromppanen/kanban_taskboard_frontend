@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { Field, FormikErrors, FormikTouched } from "formik";
-import { useRef } from "react";
+import { HTMLInputTypeAttribute, useRef } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 interface IStyledTextInputProps<T> {
@@ -8,6 +8,7 @@ interface IStyledTextInputProps<T> {
   name: keyof T;
   placeholder: string;
   textarea?: boolean;
+  type?: HTMLInputTypeAttribute;
   errors: FormikErrors<T>;
   touched: FormikTouched<T>;
 }
@@ -17,6 +18,7 @@ function StyledTextInput<T>({
   name,
   placeholder,
   textarea = false,
+  type = "text",
   errors,
   touched,
 }: IStyledTextInputProps<T>) {
@@ -31,6 +33,7 @@ function StyledTextInput<T>({
         name={name}
         placeholder={placeholder}
         as={textarea ? "textarea" : "input"}
+        type={type}
         rows="3"
         className="rounded-md bg-userGray1 px-4 py-2 placeholder:text-sm placeholder:text-neutral-500"
       />
