@@ -16,6 +16,10 @@ module.exports = {
         userPink: "#FF7B9C",
         userLightBlue: "#DCD6F7",
       },
+      backgroundImage: {
+        "userLoginBgMobile": "url('/login-bg-mobile.jpg')",
+        "userLoginBgDesktop": "url('/login-bg-desktop.jpg')",
+      }
     },
   },
   plugins: [],
