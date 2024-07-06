@@ -12,6 +12,16 @@ export interface IToken {
 export interface IUser {
   _id: string;
   username: string;
+  password: string;
+  role: UserRoles;
+  taskboards: ITaskboard[];
+}
+
+export interface IReply {
+  _id: string;
+  text: string;
+  createdBy: IUser;
+  createdAt: Date;
 }
 
 export interface IComment {
@@ -23,7 +33,7 @@ export interface IComment {
   createdAt: Date;
   resolved: boolean | Date;
   markedResolvedBy: IUser | null;
-  replies: { _id: string; text: string; createdBy: IUser; createdAt: Date }[];
+  replies: IReply[];
 }
 
 export interface ITask {

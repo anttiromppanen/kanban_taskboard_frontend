@@ -3,11 +3,11 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Field, Form, Formik } from "formik";
 import { Dispatch, SetStateAction } from "react";
 import { useParams } from "react-router-dom";
-import useAuth from "../../hooks/useAuth";
-import { createReply } from "../../services/taskboardService";
-import { IComment, IToken } from "../../types/types";
+import useAuth from "../../../hooks/useAuth";
+import { createReply } from "../../../services/taskboardService";
+import { IComment, IToken } from "../../../types/types";
 
-function Reply({
+function ReplyForm({
   comment,
   setIsReplyOpen,
 }: {
@@ -76,4 +76,4 @@ function Reply({
   );
 }
 
-export default Reply;
+export default ReplyForm;

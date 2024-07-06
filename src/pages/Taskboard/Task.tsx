@@ -7,6 +7,7 @@ import {
   useState,
 } from "react";
 import {
+  CalendarDaysIcon,
   ChatBubbleLeftIcon,
   PlusCircleIcon,
   TrashIcon,
@@ -105,13 +106,13 @@ function Task({ task }: { task: ITask }) {
           </div>
         </div>
         {token && token.role === "admin" && (
-          <div className="mt-2 flex w-full items-center">
+          <div className="mt-3 flex w-full items-center">
             <button
               type="button"
               onClick={handleTaskDelete}
-              className="relative z-10 flex items-center gap-x-1 rounded-md bg-userPink/60 px-2 py-1 text-xs text-neutral-100"
+              className="relative z-10 flex items-center gap-x-1 rounded-md bg-userGray1/50 px-2 py-2 text-xs text-neutral-300 hover:brightness-110"
             >
-              <TrashIcon className="size-4 text-neutral-200" /> Delete
+              <TrashIcon className="size-4 text-neutral-300" /> Delete
             </button>
           </div>
         )}
@@ -140,8 +141,10 @@ function Task({ task }: { task: ITask }) {
               <h3 className="text-2xl">{task.title}</h3>
               <AvatarRow users={task.users} />
             </div>
-            <p className="text-sm text-neutral-400">{task.description}</p>
-            <p className="text-sm text-neutral-400">
+            <p className="-mt-1 text-neutral-400">{task.description}</p>
+
+            <p className="mt-4 flex items-center gap-x-2 text-sm text-neutral-400">
+              <CalendarDaysIcon className="size-5" />{" "}
               {new Date(task.createdAt).toLocaleString()}
             </p>
             <div className="mt-4">
@@ -161,6 +164,7 @@ function Task({ task }: { task: ITask }) {
                     <h3 className="text-lg">Comments</h3>
                     <AddCommentButton setIsCommenting={setIsCommenting} />
                   </div>
+                  <hr className="mt-2 border-neutral-700" />
                   {isCommenting && (
                     <NewComment task={task} setIsCommenting={setIsCommenting} />
                   )}

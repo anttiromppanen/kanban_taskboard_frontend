@@ -20,7 +20,7 @@ function Login() {
         </h1>
         <div className="h-full w-full rounded-md bg-userGray2 p-4 text-neutral-300 md:h-auto md:w-[500px]">
           <div className="relative">
-            <h1 className="text-4xl font-bold">LOG IN</h1>
+            <h1 className="text-center text-4xl font-bold">LOG IN</h1>
             <button
               type="button"
               aria-label="Close"

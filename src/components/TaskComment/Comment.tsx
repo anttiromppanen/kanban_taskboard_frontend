@@ -1,4 +1,3 @@
-import { ReactNode, useMemo, useState } from "react";
 import {
   BugAntIcon,
   ChatBubbleBottomCenterTextIcon,
@@ -6,14 +5,15 @@ import {
   QuestionMarkCircleIcon,
   TrashIcon,
 } from "@heroicons/react/16/solid";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { ReactNode, useState } from "react";
 import { useParams } from "react-router-dom";
-import randomAvatar from "../../helpers/randomAvatar";
-import { CommentType, IComment, IToken, IUser } from "../../types/types";
 import { timeAgoFromDate } from "../../helpers/formatting";
-import Reply from "./Reply";
 import useAuth from "../../hooks/useAuth";
-import { deleteComment, deleteReply } from "../../services/taskboardService";
+import useHandleComment from "../../hooks/useHandleComment";
+import { CommentType, IComment, IToken } from "../../types/types";
+import Reply from "../TaskboardSection/TaskReply/Reply";
+import ReplyForm from "../TaskboardSection/TaskReply/ReplyForm";
+import CommentInfo from "./CommentInfo";
 
 const commentTypeIconSelector: Record<CommentType, ReactNode> = {
   question: <QuestionMarkCircleIcon className="size-5 text-neutral-400" />,
@@ -23,30 +23,9 @@ const commentTypeIconSelector: Record<CommentType, ReactNode> = {
   bug: <BugAntIcon className="size-5 text-neutral-400" />,
 };
 
-function CommentInfo({
-  createdBy,
-  createdAt,
-}: {
-  createdBy: IUser;
-  createdAt: Date;
-}) {
-  const { username } = createdBy;
-
-  return (
-    <div className="flex items-center gap-x-2">
-      <p className="ml-1 font-bold">{username}</p>
-      <span className="text-[8px]">{"\u25CF"}</span>
-      <p className="text-[11px] text-neutral-400">
-        {timeAgoFromDate(createdAt)}
-      </p>
-    </div>
-  );
-}
-
 function Comment({ comment }: { comment: IComment }) {
   const { token } = useAuth();
   const { id: taskboardId } = useParams();
-  const queryClient = useQueryClient();
   const [isReplyOpen, setIsReplyOpen] = useState(false);
   const {
     commentType,
@@ -60,34 +39,12 @@ function Comment({ comment }: { comment: IComment }) {
   } = comment;
 
   const { username } = createdBy;
-  const avatar = useMemo(() => randomAvatar(), []);
-
-  const { mutate: deleteCommentMutate } = useMutation({
-    mutationFn: () =>
-      deleteComment(
-        taskboardId as string,
-        taskId,
-        comment._id,
-        token as IToken,
-      ),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["Taskboard", taskboardId] });
-    },
-  });
-
-  const { mutate: deleteReplyMutate } = useMutation({
-    mutationFn: ({ replyId }: { replyId: string }) =>
-      deleteReply(
-        taskboardId as string,
-        taskId,
-        comment._id,
-        replyId,
-        token as IToken,
-      ),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["Taskboard", taskboardId] });
-    },
-  });
+  const { avatar, deleteCommentMutate, deleteReplyMutate } = useHandleComment(
+    taskboardId as string,
+    taskId,
+    comment._id,
+    token as IToken,
+  );
 
   return (
     <li className="mt-2">
@@ -128,29 +85,16 @@ function Comment({ comment }: { comment: IComment }) {
           {text}
         </div>
         {replies.map((reply) => (
-          <div key={reply._id} className="ml-14 mt-1">
-            <div className="flex items-center justify-between pr-1">
-              <CommentInfo
-                createdBy={reply.createdBy}
-                createdAt={reply.createdAt}
-              />
-              {token?.id === createdBy._id && (
-                <button
-                  type="button"
-                  aria-label="Delete comment"
-                  onClick={() => deleteReplyMutate({ replyId: reply._id })}
-                >
-                  <TrashIcon className="size-4 text-red-600" />
-                </button>
-              )}
-            </div>
-            <div className="mt-1.5 rounded-md bg-userGray1/50 p-2 text-xs text-neutral-300">
-              {reply.text}
-            </div>
-          </div>
+          <Reply
+            key={reply._id}
+            reply={reply}
+            token={token as IToken}
+            createdBy={createdBy}
+            deleteReplyMutate={deleteReplyMutate}
+          />
         ))}
         {isReplyOpen && (
-          <Reply comment={comment} setIsReplyOpen={setIsReplyOpen} />
+          <ReplyForm comment={comment} setIsReplyOpen={setIsReplyOpen} />
         )}
       </div>
       {resolved && (
