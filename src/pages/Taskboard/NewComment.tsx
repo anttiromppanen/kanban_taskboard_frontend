@@ -5,7 +5,7 @@ import { Dispatch, SetStateAction, useRef } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import useAuth from "../../hooks/useAuth";
 import { ITask, IToken } from "../../types/types";
-import { createComment } from "../../services/taskboardService";
+import { createComment } from "../../services/commentService";
 
 const validationSchema = Yup.object({
   commentText: Yup.string().required("Text required"),

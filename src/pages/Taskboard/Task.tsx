@@ -1,3 +1,10 @@
+import { draggable } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
+import {
+  CalendarDaysIcon,
+  ChatBubbleLeftIcon,
+  PlusCircleIcon,
+} from "@heroicons/react/16/solid";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   Dispatch,
   MouseEventHandler,
@@ -6,22 +13,15 @@ import {
   useRef,
   useState,
 } from "react";
-import {
-  CalendarDaysIcon,
-  ChatBubbleLeftIcon,
-  PlusCircleIcon,
-  TrashIcon,
-} from "@heroicons/react/16/solid";
-import { draggable } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { ITask, IToken } from "../../types/types";
 import AvatarRow from "../../components/AvatarRow";
-import { statusColors } from "../../const/const";
+import DarkButton from "../../components/Buttons/DarkButton";
 import Comment from "../../components/TaskComment/Comment";
+import { statusColors } from "../../const/const";
 import { timeAgoFromDate } from "../../helpers/formatting";
-import NewComment from "./NewComment";
 import useAuth from "../../hooks/useAuth";
-import { deleteTask } from "../../services/taskboardService";
+import { deleteTask } from "../../services/taskService";
+import { ITask, IToken } from "../../types/types";
+import NewComment from "./NewComment";
 
 function AddCommentButton({
   setIsCommenting,
@@ -107,13 +107,11 @@ function Task({ task }: { task: ITask }) {
         </div>
         {token && token.role === "admin" && (
           <div className="mt-3 flex w-full items-center">
-            <button
-              type="button"
-              onClick={handleTaskDelete}
-              className="relative z-10 flex items-center gap-x-1 rounded-md bg-userGray1/50 px-2 py-2 text-xs text-neutral-300 hover:brightness-110"
-            >
-              <TrashIcon className="size-4 text-neutral-300" /> Delete
-            </button>
+            <DarkButton
+              text="Delete"
+              type="delete"
+              handlePress={handleTaskDelete}
+            />
           </div>
         )}
       </div>
@@ -141,7 +139,7 @@ function Task({ task }: { task: ITask }) {
               <h3 className="text-2xl">{task.title}</h3>
               <AvatarRow users={task.users} />
             </div>
-            <p className="-mt-1 text-neutral-400">{task.description}</p>
+            <p className="-mt-1 text-sm text-neutral-400">{task.description}</p>
 
             <p className="mt-4 flex items-center gap-x-2 text-sm text-neutral-400">
               <CalendarDaysIcon className="size-5" />{" "}

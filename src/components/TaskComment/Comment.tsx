@@ -14,6 +14,7 @@ import { CommentType, IComment, IToken } from "../../types/types";
 import Reply from "../TaskboardSection/TaskReply/Reply";
 import ReplyForm from "../TaskboardSection/TaskReply/ReplyForm";
 import CommentInfo from "./CommentInfo";
+import DarkButton from "../Buttons/DarkButton";
 
 const commentTypeIconSelector: Record<CommentType, ReactNode> = {
   question: <QuestionMarkCircleIcon className="size-5 text-neutral-400" />,
@@ -39,12 +40,13 @@ function Comment({ comment }: { comment: IComment }) {
   } = comment;
 
   const { username } = createdBy;
-  const { avatar, deleteCommentMutate, deleteReplyMutate } = useHandleComment(
-    taskboardId as string,
-    taskId,
-    comment._id,
-    token as IToken,
-  );
+  const { avatar, deleteCommentMutate, deleteReplyMutate, setResolvedMutate } =
+    useHandleComment(
+      taskboardId as string,
+      taskId,
+      comment._id,
+      token as IToken,
+    );
 
   return (
     <li className="mt-2">
@@ -61,6 +63,14 @@ function Comment({ comment }: { comment: IComment }) {
           <div className="ml-2 flex w-full items-center justify-between">
             <CommentInfo createdBy={createdBy} createdAt={createdAt} />
             <div className="flex items-center gap-x-2">
+              {token?.role === "admin" && !resolved && (
+                <DarkButton
+                  type="resolve"
+                  text="Resolve"
+                  size="sm"
+                  handlePress={() => setResolvedMutate()}
+                />
+              )}
               {token?.id === createdBy._id && (
                 <button
                   type="button"

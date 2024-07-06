@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { dropTargetForElements } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
 import useAuth from "../../hooks/useAuth";
 import { ITask, IToken, StatusType, TasksByStatus } from "../../types/types";
-import { updateTask } from "../../services/taskboardService";
+import { updateTask } from "../../services/taskService";
 import { statusColors } from "../../const/const";
 import Task from "./Task";
 

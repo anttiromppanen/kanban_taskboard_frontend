@@ -1,8 +1,9 @@
 import { useMemo } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import randomAvatar from "../helpers/randomAvatar";
-import { deleteComment, deleteReply } from "../services/taskboardService";
 import { IToken } from "../types/types";
+import { deleteComment, setResolved } from "../services/commentService";
+import { deleteReply } from "../services/replyService";
 
 const useHandleComment = (
   taskboardId: string,
@@ -36,7 +37,14 @@ const useHandleComment = (
     },
   });
 
-  return { deleteCommentMutate, deleteReplyMutate, avatar };
+  const { mutate: setResolvedMutate } = useMutation({
+    mutationFn: () =>
+      setResolved(taskboardId as string, taskId, commentId, token as IToken),
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: ["Taskboard", taskboardId] }),
+  });
+
+  return { deleteCommentMutate, deleteReplyMutate, avatar, setResolvedMutate };
 };
 
 export default useHandleComment;

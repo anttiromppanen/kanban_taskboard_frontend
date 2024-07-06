@@ -4,8 +4,8 @@ import { Field, Form, Formik } from "formik";
 import { Dispatch, SetStateAction } from "react";
 import { useParams } from "react-router-dom";
 import useAuth from "../../../hooks/useAuth";
-import { createReply } from "../../../services/taskboardService";
 import { IComment, IToken } from "../../../types/types";
+import { createReply } from "../../../services/replyService";
 
 function ReplyForm({
   comment,

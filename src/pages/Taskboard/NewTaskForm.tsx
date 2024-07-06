@@ -8,7 +8,7 @@ import { useParams } from "react-router-dom";
 import StyledTextInput from "../../components/Form/StyledTextInput";
 import UsersCheckboxGroup from "../../components/Form/UsersCheckboxGroup";
 import { IToken, IUser, StatusType } from "../../types/types";
-import { createTask } from "../../services/taskboardService";
+import { createTask } from "../../services/taskService";
 import { formatAxiosError } from "../../helpers/formatting";
 import useAuth from "../../hooks/useAuth";
 
