@@ -3,8 +3,12 @@ import { Link } from "react-router-dom";
 import AvatarRow from "../../components/AvatarRow";
 import TaskboardFrame from "../../components/TaskboardFrame";
 import useAuth from "../../hooks/useAuth";
-import { getTaskboardsForUser } from "../../services/userService";
-import { ITaskboard, IToken } from "../../types/types";
+import {
+  getTaskboardsForUser,
+  getTasksForUser,
+} from "../../services/userService";
+import { ITask, ITaskboard, IToken } from "../../types/types";
+import TaskPreview from "./TaskPreview";
 
 function TaskboardPreview({ taskboard }: { taskboard: ITaskboard }) {
   const {
@@ -40,6 +44,7 @@ function TaskboardPreview({ taskboard }: { taskboard: ITaskboard }) {
 
 function Home() {
   const { token } = useAuth();
+
   const {
     isLoading,
     isError,
@@ -48,21 +53,33 @@ function Home() {
   } = useQuery({
     queryKey: ["taskboards"],
     queryFn: () => getTaskboardsForUser(token as IToken),
-    retry: false,
+  });
+
+  const {
+    data: userTasks,
+    isLoading: tasksLoading,
+    isError: tasksError,
+    error: tasksErrorData,
+  } = useQuery({
+    queryKey: ["tasks"],
+    queryFn: () => getTasksForUser(token as IToken),
   });
 
   return (
     <TaskboardFrame>
       <div className="flex flex-col gap-y-4">
         <section>
-          <h2>Taskboards</h2>
-          <div className="mt-2 grid grid-cols-4 gap-4">
+          <h2 className="text-3xl">Taskboards</h2>
+          <div className="mt-4 grid grid-cols-4 gap-4">
             {taskboards?.data.map((x: ITaskboard) => (
               <TaskboardPreview key={x._id} taskboard={x} />
             ))}
           </div>
         </section>
-        <h2>My tasks</h2>
+        <h2 className="mt-2 text-3xl">My tasks</h2>
+        <div className="grid grid-cols-4 gap-4">
+          {userTasks?.map((x: ITask) => <TaskPreview key={x._id} task={x} />)}
+        </div>
       </div>
     </TaskboardFrame>
   );

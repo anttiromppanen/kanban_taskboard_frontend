@@ -17,3 +17,10 @@ export const getTaskboardsForUser = async (token: IToken) => {
   });
   return response;
 };
+
+export const getTasksForUser = async (token: IToken) => {
+  const response = await axios.get(`${baseUrl}/tasks`, {
+    headers: { Authorization: createBearerToken(token) },
+  });
+  return response.data;
+};

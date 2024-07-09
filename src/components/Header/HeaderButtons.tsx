@@ -1,4 +1,8 @@
-import { ChevronDownIcon, PlusIcon } from "@heroicons/react/16/solid";
+import {
+  ChevronDownIcon,
+  ChevronRightIcon,
+  PlusIcon,
+} from "@heroicons/react/16/solid";
 import { Dispatch, SetStateAction, useState } from "react";
 import useAuth from "../../hooks/useAuth";
 import UserMenu from "./UserMenu";
@@ -19,7 +23,7 @@ function HeaderButtons({
           aria-label="New taskboard"
           title="Add new taskboard"
           onClick={() => setIsOpen(true)}
-          className="flex size-8 items-center justify-center rounded-full bg-green-600"
+          className="flex size-8 items-center justify-center rounded-full bg-green-600 hover:brightness-125"
         >
           <PlusIcon className="size-4 text-white" />
         </button>
@@ -38,7 +42,11 @@ function HeaderButtons({
         />
         <div className="flex items-center gap-x-1">
           <p>{token?.username}</p>
-          <ChevronDownIcon className="size-4" />
+          {isMenuOpen ? (
+            <ChevronDownIcon className="size-4" />
+          ) : (
+            <ChevronRightIcon className="size-4" />
+          )}
         </div>
         {isMenuOpen && <UserMenu />}
       </div>

@@ -4,6 +4,14 @@ import { IToken, IUser, StatusType } from "../types/types";
 
 const baseUrl = "http://localhost:3001/api/taskboard";
 
+const getTask = async (taskId: string, taskboardId: string, token: IToken) => {
+  const response = await axios.get(`${baseUrl}/${taskboardId}/task/${taskId}`, {
+    headers: { Authorization: createBearerToken(token) },
+  });
+
+  return response.data;
+};
+
 const createTask = async (
   taskboardId: string,
   title: string,
@@ -57,4 +65,4 @@ const deleteTask = async (
   return response.data;
 };
 
-export { createTask, updateTask, deleteTask };
+export { getTask, createTask, updateTask, deleteTask };

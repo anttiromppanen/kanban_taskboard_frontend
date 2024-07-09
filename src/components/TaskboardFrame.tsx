@@ -4,7 +4,7 @@ import TaskboardSection from "./TaskboardSection/TaskboardSection";
 
 function TaskboardFrame({ children }: { children: ReactNode }) {
   return (
-    <div className="flex">
+    <div className="flex h-full">
       <Sidebar />
       <TaskboardSection>{children}</TaskboardSection>
     </div>
