@@ -1,10 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
 import { Field } from "formik";
-import { getAllUsers } from "../../services/userService";
-import { IToken, IUser } from "../../types/types";
 import useAuth from "../../hooks/useAuth";
+import { getUsersForTaskboard } from "../../services/taskboardService";
+import { IToken, IUser } from "../../types/types";
 
-function UsersCheckboxGroup() {
+interface IUsersCheckboxGroupProps {
+  taskboardId: string;
+}
+
+function UsersCheckboxGroup({ taskboardId }: IUsersCheckboxGroupProps) {
   const { token } = useAuth();
 
   const {
@@ -12,8 +16,8 @@ function UsersCheckboxGroup() {
     isLoading: isGetUsersLoading,
     isError: isGetUsersError,
   } = useQuery({
-    queryKey: ["allUsers"],
-    queryFn: () => getAllUsers(token as IToken),
+    queryKey: ["users", taskboardId],
+    queryFn: () => getUsersForTaskboard(taskboardId, token as IToken),
   });
 
   return (

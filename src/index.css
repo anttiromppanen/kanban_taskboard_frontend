@@ -33,7 +33,19 @@
   }
 
   .overlay-bg {
-    @apply fixed left-0 top-0 z-20 h-dvh w-full bg-black/80 text-neutral-300 md:h-screen
+    @apply fixed left-0 top-0 z-20 h-dvh w-full bg-black/80 text-neutral-300 md:h-screen;
+  }
+
+  .preview-component {
+    @apply rounded-md bg-userGray2 p-4 text-sm text-neutral-300 *:overflow-hidden *:overflow-ellipsis *:whitespace-nowrap hover:brightness-110;
+  }
+
+  .preview-component h3 {
+    @apply font-bold text-neutral-200;
+  }
+
+  .preview-component hr {
+    @apply my-2 border-neutral-600;
   }
 
   .users-checkbox-label:has(input:checked) {

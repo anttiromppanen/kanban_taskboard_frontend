@@ -12,6 +12,14 @@ const getTaskboard = async (id: string, token: IToken) => {
   return response.data;
 };
 
+const getUsersForTaskboard = async (id: string, token: IToken) => {
+  const response = await axios.get(`${baseUrl}/${id}/users`, {
+    headers: { Authorization: createBearerToken(token) },
+  });
+
+  return response.data;
+};
+
 const createTaskboard = async (
   token: IToken,
   name: string,
@@ -27,4 +35,4 @@ const createTaskboard = async (
   return response.data;
 };
 
-export { createTaskboard, getTaskboard };
+export { createTaskboard, getTaskboard, getUsersForTaskboard };

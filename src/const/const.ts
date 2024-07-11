@@ -1,3 +1,5 @@
+import { StatusType } from "../types/types";
+
 export const statusColors = {
   Backlog: {
     bg: "bg-userPurple/60",
@@ -21,4 +23,9 @@ export const statusColors = {
   },
 };
 
-export const getRidOfDefaultExport = () => {};
+export const statusTypes: StatusType[] = [
+  "Backlog",
+  "To do",
+  "In progress",
+  "Done",
+];

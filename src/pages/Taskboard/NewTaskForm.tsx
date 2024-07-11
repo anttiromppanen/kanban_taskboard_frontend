@@ -117,7 +117,7 @@ function NewTaskForm() {
             </div>
           </div>
           <div>
-            <UsersCheckboxGroup />
+            <UsersCheckboxGroup taskboardId={taskboardId as string} />
           </div>
           <button type="submit" className="form-button">
             Add

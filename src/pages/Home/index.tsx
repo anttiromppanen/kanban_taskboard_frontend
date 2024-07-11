@@ -24,14 +24,11 @@ function TaskboardPreview({ taskboard }: { taskboard: ITaskboard }) {
   const numOfTasksText = !tasks.length ? "No tasks" : `${tasks.length} tasks`;
 
   return (
-    <Link
-      to={`taskboard/${id}`}
-      className="rounded-md bg-userGray2 p-4 text-sm text-neutral-300 *:overflow-hidden *:overflow-ellipsis *:whitespace-nowrap hover:brightness-110"
-    >
-      <h3 className="font-bold text-neutral-200">{name}</h3>
+    <Link to={`taskboard/${id}`} className="preview-component">
+      <h3>{name}</h3>
       <p>{description}</p>
       <p>{numOfTasksText}</p>
-      <hr className="my-2 border-neutral-600" />
+      <hr />
       <p>Created at {new Date(createdAt).toDateString()}</p>
       <p className="mb-2">
         Created by{" "}

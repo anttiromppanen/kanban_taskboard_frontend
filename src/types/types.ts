@@ -41,7 +41,7 @@ export interface ITask {
   title: string;
   description: string;
   status: StatusType;
-  createdBy: string;
+  createdBy: IUser;
   createdAt: Date;
   taskboardId: string;
   users: IUser[];
